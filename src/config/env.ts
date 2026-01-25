@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import * as jwt from 'jsonwebtoken';
 import { logger } from '../lib/winston-logger';
 
 const EnvSchema = z.object({
@@ -8,7 +9,8 @@ const EnvSchema = z.object({
   JWT_EXP: z
     .string()
     .min(1, { error: 'JWT_EXP is required' })
-    .regex(/^\d+[smhd]$/, 'Invalid JWT expiry format'),
+    .regex(/^\d+[smhd]$/, 'Invalid JWT expiry format')
+    .transform((val) => val as jwt.SignOptions['expiresIn']),
   DATABASE_URL: z.string().min(1, { error: 'DATABASE_URL is required' }),
 });
 
