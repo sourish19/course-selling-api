@@ -1,7 +1,7 @@
-import { password } from 'bun';
 import * as z from 'zod';
+import { Role } from '../../config/auth-constants';
 
-const SignupSchema = z.object({
+export const SignupSchema = z.object({
   email: z
     .string()
     .min(1, { error: 'Email is required' })
@@ -11,10 +11,14 @@ const SignupSchema = z.object({
     .toLowerCase(),
   name: z.string().min(1, { error: 'Email is required' }).trim().toLowerCase(),
   password: z.string().min(1, { error: 'Password is required' }),
-  role: z.enum(['STUDENT', 'INSTRUCTOR']),
+  role: z.enum(Role),
 });
 
-const SigninSchema = z.object({
+export const SigninSchema = z.object({
   email: z.string().min(1, { error: 'Email is required' }),
   password: z.string().min(1, { error: 'Password is required' }),
+  role: z.enum(Role),
 });
+
+export type SignupTypeValidation = z.infer<typeof SignupSchema>;
+export type SigninTypeValidation = z.infer<typeof SigninSchema>;
