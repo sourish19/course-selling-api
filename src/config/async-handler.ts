@@ -6,9 +6,9 @@ type THandler = (
   next: NextFunction
 ) => Promise<unknown>;
 
-const async_Handler =
+const asyncHandler =
   (requestHandler: THandler): RequestHandler =>
   (req, res, next) =>
     Promise.resolve(requestHandler(req, res, next)).catch(next);
 
-export default async_Handler;
+export default asyncHandler;

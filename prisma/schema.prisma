@@ -25,7 +25,7 @@ model User {
 
 model Course {
   id           String     @id @default(uuid())
-  title        String
+  title        String 
   description  String?
   price        Int
   instructorId String

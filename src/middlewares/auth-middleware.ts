@@ -1,10 +1,10 @@
 import jwt, { type JwtPayload } from 'jsonwebtoken';
-import async_Handler from '../config/async-handler';
+import asyncHandler from '../config/async-handler';
 import { UnauthorizedError } from '../config/api-error';
 import { ENV } from '../config/env';
 import { prisma } from '../lib/prisma';
 
-const auth_Middleware = async_Handler(async (req, res, next) => {
+const authMiddleware = asyncHandler(async (req, res, next) => {
   const { token: cookieToken }: { token: string | undefined } = req.cookies;
 
   const bearer = req.header('Authorization');
@@ -32,4 +32,4 @@ const auth_Middleware = async_Handler(async (req, res, next) => {
   next();
 });
 
-export default auth_Middleware;
+export default authMiddleware;
