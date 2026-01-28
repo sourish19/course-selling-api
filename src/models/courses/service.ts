@@ -5,11 +5,11 @@ import {
   NotFoundError,
 } from '../../config/api-error';
 import type { CreateCourseSchemaType } from './validation';
-import type USER from '../../types/auth';
+import type User from '../../types/auth';
 import type { UpdateCourseDetails } from './types';
 
 export const createCourseService = async (
-  user: USER,
+  user: User,
   courseData: CreateCourseSchemaType
 ) => {
   const courseAlreadyExists = await prisma.course.findFirst({
@@ -37,15 +37,6 @@ export const createCourseService = async (
   return createCourse;
 };
 
-/*
-First check cookies 
-then check the role 
-then validate course data 
-pass the user & course data to the service 
-create a course using prisma.course.create
-
-*/
-
 export const getAllCoursesService = async () => {
   const courses = await prisma.course.findMany();
 
@@ -67,7 +58,7 @@ export const getCourseByIdService = async (id: string) => {
 };
 
 export const updateCourseByIdService = async (
-  user: USER,
+  user: User,
   id: string,
   data: UpdateCourseDetails
 ) => {
@@ -84,7 +75,7 @@ export const updateCourseByIdService = async (
   return course;
 };
 
-export const deleteCourseByIdService = async (user: USER, id: string) => {
+export const deleteCourseByIdService = async (user: User, id: string) => {
   const course = await prisma.course.delete({
     where: {
       id,
