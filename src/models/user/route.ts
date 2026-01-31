@@ -9,3 +9,5 @@ const router = Router();
 router.route('/auth/signup').post(validationMiddleware(SignupSchema), signup);
 router.route('/auth/sigin').post(validationMiddleware(SigninSchema), signin);
 router.route('/auth/logout').post(authMiddleware, logout);
+
+export default router;

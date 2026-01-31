@@ -1,6 +1,5 @@
 import * as z from 'zod';
 import * as jwt from 'jsonwebtoken';
-import { logger } from '../lib/winston-logger';
 
 const EnvSchema = z.object({
   PORT: z.coerce.number().int().positive(),
@@ -17,8 +16,8 @@ const EnvSchema = z.object({
 const parsedData = EnvSchema.safeParse(process.env);
 
 if (!parsedData.success) {
-  logger.error('Invalid environment variables');
-  logger.error(z.treeifyError(parsedData.error));
+  console.error('Invalid environment variables');
+  console.error(z.treeifyError(parsedData.error));
   process.exit(1);
 }
 

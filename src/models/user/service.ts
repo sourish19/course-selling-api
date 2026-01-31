@@ -5,11 +5,11 @@ import {
   InternalServerError,
   UnauthorizedError,
 } from '../../config/api-error';
-import { compare_Password, hash_Password } from '../../lib/password';
-import type { SIGNUP, FIND_USER_PARAMS, SIGNIN } from './types';
+import { comparePassword, hashPassword } from '../../lib/password';
+import type { Signup, FindUserParams, Signin } from './types';
 import { logger } from '../../lib/winston-logger';
 
-const find_User_Service = async ({ email, role }: FIND_USER_PARAMS) => {
+const findUserService = async ({ email, role }: FindUserParams) => {
   try {
     const user = await prisma.user.findFirst({
       where: {
@@ -27,17 +27,17 @@ const find_User_Service = async ({ email, role }: FIND_USER_PARAMS) => {
   }
 };
 
-export const signup_Service = async ({
+export const signupService = async ({
   name,
   email,
   password,
   role,
-}: SIGNUP) => {
-  const validUser = await find_User_Service({ email, role });
+}: Signup) => {
+  const validUser = await findUserService({ email, role });
 
   if (validUser) throw new ConflictError('Email already exists');
 
-  const hashedPassword = await hash_Password(password);
+  const hashedPassword = await hashPassword(password);
 
   const user = await prisma.user.create({
     data: {
@@ -53,12 +53,12 @@ export const signup_Service = async ({
   return user;
 };
 
-export const signin_Service = async ({ email, password, role }: SIGNIN) => {
-  const validUser = await find_User_Service({ email, role });
+export const signinService = async ({ email, password, role }: Signin) => {
+  const validUser = await findUserService({ email, role });
 
   if (!validUser) throw new ForbiddenError();
 
-  const isPasswordValid = await compare_Password(validUser.password, password);
+  const isPasswordValid = await comparePassword(validUser.password, password);
 
   if (!isPasswordValid) throw new UnauthorizedError('Invalid credentials');
 

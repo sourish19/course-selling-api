@@ -1,18 +1,18 @@
 import ApiResponse from '../../config/api-response';
 import asyncHandler from '../../config/async-handler';
-import { generate_Token } from '../../lib/jwt';
-import sanatize_User from '../../lib/sanatize';
-import { signin_Service, signup_Service } from './service';
+import { generateJwtToken } from '../../lib/jwt';
+import sanatizeUser from '../../lib/sanatize';
+import { signinService, signupService } from './service';
 import cookie_Options from '../../config/cookies';
-import type { SIGNIN, SIGNUP } from './types';
+import type { Signin, Signup } from './types';
 import { UnauthorizedError } from '../../config/api-error';
 
 export const signup = asyncHandler(async (req, res) => {
-  const { name, email, password, role }: SIGNUP = req.body;
+  const user: Signup = req.body;
 
-  const userSignup = await signup_Service({ name, email, password, role });
+  const userSignup = await signupService(user);
 
-  const sanatizedUser = sanatize_User(userSignup);
+  const sanatizedUser = sanatizeUser(userSignup);
 
   res
     .status(201)
@@ -20,13 +20,21 @@ export const signup = asyncHandler(async (req, res) => {
 });
 
 export const signin = asyncHandler(async (req, res) => {
-  const { email, password, role }: SIGNIN = req.body;
+  const { email, password, role }: Signin = req.body;
 
-  const userSignin = await signin_Service({ email, password, role });
+  const userSignin = await signinService({ email, password, role });
 
-  const generateToken = generate_Token({ id: userSignin.id, role });
+  const generateToken = generateJwtToken({
+    id: userSignin.id,
+    role,
+  });
 
-  res.status(200).cookie('token', generateToken, cookie_Options);
+  const sanatizedUser = sanatizeUser(userSignin);
+
+  res
+    .status(200)
+    .cookie('token', generateToken, cookie_Options)
+    .json(new ApiResponse(200, 'Signin successfull', sanatizedUser));
 });
 
 export const logout = asyncHandler(async (req, res) => {

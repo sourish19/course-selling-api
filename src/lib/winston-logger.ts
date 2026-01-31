@@ -36,9 +36,8 @@ const baseFormat = format.combine(
 );
 
 export const logger = createLogger({
-  level: ENV.NODE_ENV === 'development' ? 'debug' : 'info', // using debug will get ignored in prod
+  level: ENV.NODE_ENV === 'development' ? 'debug' : 'info',
   format: baseFormat,
-  defaultMeta: { service: 'user-service' },
   transports: [
     new transports.Console({
       format: format.combine(

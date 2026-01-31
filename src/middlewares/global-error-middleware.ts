@@ -1,11 +1,12 @@
-import type { Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { logger } from '../lib/winston-logger';
 import { ApiError } from '../config/api-error';
 
-const globalErrorMiddleware = async (
+const globalErrorMiddleware = (
   error: unknown,
-  req: Request,
-  res: Response
+  _req: Request,
+  res: Response,
+  next: NextFunction
 ) => {
   if (error instanceof ApiError) {
     res.status(error.status).json({
@@ -13,9 +14,8 @@ const globalErrorMiddleware = async (
       message: error.message,
       code: error.code,
       error: error.error,
-      data: error.data,
     });
-    return;
+    next();
   }
   logger.error('Unhandled error', error);
 
@@ -29,8 +29,9 @@ const globalErrorMiddleware = async (
     message,
     code: 'INTERNAL_SERVER_ERROR',
     error: [],
-    data: [],
   });
+
+  next();
 };
 
 export default globalErrorMiddleware;

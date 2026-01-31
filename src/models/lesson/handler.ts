@@ -22,5 +22,5 @@ export const getLesson = asyncHandler(async (req, res) => {
 
   const lessons = await getLessonService(courseId as string);
 
-  res.status(201).json(new ApiResponse(200, 'Fetched Lessons', lessons));
+  res.status(200).json(new ApiResponse(200, 'Fetched Lessons', lessons));
 });

@@ -1,18 +1,21 @@
 import * as z from 'zod';
-import asyncHandler from '../config/async-handler';
 import { logger } from '../lib/winston-logger';
 import { ValidationError } from '../config/api-error';
+import type { Request, Response, NextFunction, RequestHandler } from 'express';
 
-const validationMiddleware = (schema: z.ZodType) =>
-  asyncHandler(async (req, res, next) => {
+const validationMiddleware = (schema: z.ZodType): RequestHandler => {
+  return async (req: Request, _res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.body);
-    if (result.success) next();
-    else if (result.error instanceof z.ZodError) {
-      logger.warn('Validation failed');
-      throw new ValidationError('validation error', [
-        z.flattenError(result.error).fieldErrors,
-      ]);
+    if (result.success) return next();
+    if (result.error instanceof z.ZodError) {
+      logger.warn(result.error);
+      throw new ValidationError(
+        'Validation Error',
+        [z.flattenError(result.error).fieldErrors],
+        []
+      );
     }
-  });
+  };
+};
 
 export default validationMiddleware;

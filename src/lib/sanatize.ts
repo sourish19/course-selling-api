@@ -1,6 +1,6 @@
 import type { User } from '../generated/prisma/client';
 
-const sanatize_User = (user: User) => {
+const sanatizeUser = (user: User) => {
   return {
     id: user.id,
     email: user.email,
@@ -8,4 +8,4 @@ const sanatize_User = (user: User) => {
   };
 };
 
-export default sanatize_User;
+export default sanatizeUser;

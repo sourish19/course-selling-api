@@ -1,9 +1,9 @@
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { ENV } from '../config/env';
 import type { User } from '../generated/prisma/client';
 import { logger } from './winston-logger';
 
-export const generate_Token = ({ id, role }: Pick<User, 'id' | 'role'>) => {
+export const generateJwtToken = ({ id, role }: Pick<User, 'id' | 'role'>) => {
   try {
     const token = jwt.sign({ id, role }, ENV.JWT_SECRET, {
       expiresIn: ENV.JWT_EXP,

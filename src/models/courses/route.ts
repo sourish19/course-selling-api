@@ -32,3 +32,5 @@ router
 // These two are public endpoints
 router.route('/courses').get(authMiddleware, getAllCourses);
 router.route('/courses/:id').get(authMiddleware, getCourseById);
+
+export default router;

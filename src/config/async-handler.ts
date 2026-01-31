@@ -9,6 +9,6 @@ type THandler = (
 const asyncHandler =
   (requestHandler: THandler): RequestHandler =>
   (req, res, next) =>
-    Promise.resolve(requestHandler(req, res, next)).catch(next);
+    Promise.resolve(requestHandler(req, res, next)).catch((err) => next(err));
 
 export default asyncHandler;
