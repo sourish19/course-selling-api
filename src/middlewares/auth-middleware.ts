@@ -5,7 +5,7 @@ import { ENV } from '../config/env';
 import { prisma } from '../lib/prisma';
 
 const authMiddleware = asyncHandler(async (req, res, next) => {
-  const { token: cookieToken }: { token: string | undefined } = req.cookies;
+  const cookieToken = req.cookies?.token as string | undefined;
 
   const bearer = req.header('Authorization');
 

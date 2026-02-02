@@ -5,7 +5,7 @@ import sanatizeUser from '../../lib/sanatize';
 import { signinService, signupService } from './service';
 import cookie_Options from '../../config/cookies';
 import type { Signin, Signup } from './types';
-import { UnauthorizedError } from '../../config/api-error';
+import * as error from '../../config/api-error';
 
 export const signup = asyncHandler(async (req, res) => {
   const user: Signup = req.body;
@@ -38,7 +38,10 @@ export const signin = asyncHandler(async (req, res) => {
 });
 
 export const logout = asyncHandler(async (req, res) => {
-  if (!req.user) throw new UnauthorizedError();
+  if (!req.user) throw new error.UnauthorizedError();
 
-  res.status(200).clearCookie('token', cookie_Options);
+  res
+    .status(200)
+    .clearCookie('token', cookie_Options)
+    .json(new ApiResponse(200, 'Logout successfull', {}));
 });

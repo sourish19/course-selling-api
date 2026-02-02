@@ -3,7 +3,7 @@ import * as jwt from 'jsonwebtoken';
 
 const EnvSchema = z.object({
   PORT: z.coerce.number().int().positive(),
-  NODE_ENV: z.enum(['development', 'production']),
+  NODE_ENV: z.enum(['development', 'production']).default('development'),
   JWT_SECRET: z.string().min(1, { error: 'JWT_SECRET is required' }),
   JWT_EXP: z
     .string()

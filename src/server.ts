@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import { ENV } from './config/env';
 import { logger } from './lib/winston-logger';
 import globalErrorMiddleware from './middlewares/global-error-middleware';
@@ -13,6 +14,7 @@ const PORT = ENV.PORT;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 if (ENV.NODE_ENV !== 'production') {
   app.use((req: Request, _res, next: NextFunction) => {
