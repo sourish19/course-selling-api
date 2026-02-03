@@ -7,7 +7,10 @@ import {
 } from '../../config/api-error';
 import type { UpdateLessonDetails } from './types';
 
-export const createLessonService = async (user: User, data: UpdateLessonDetails) => {
+export const createLessonService = async (
+  user: User,
+  data: UpdateLessonDetails
+) => {
   // * This is for checkinhg if the course is created by original instructor
   const isValidCourse = prisma.course.findFirst({
     where: {

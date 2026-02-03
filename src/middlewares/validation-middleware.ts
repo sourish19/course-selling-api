@@ -9,10 +9,9 @@ const validationMiddleware = (schema: z.ZodType): RequestHandler => {
     if (result.success) return next();
     if (result.error instanceof z.ZodError) {
       logger.warn(result.error);
-      throw new ValidationError(
-        'Validation Error',
-        [z.flattenError(result.error).fieldErrors],
-      );
+      throw new ValidationError('Validation Error', [
+        z.flattenError(result.error).fieldErrors,
+      ]);
     }
   };
 };

@@ -7,6 +7,7 @@ import globalErrorMiddleware from './middlewares/global-error-middleware';
 import userRouter from './models/user/route';
 import coursesRouter from './models/courses/route';
 import lessonRouter from './models/lesson/route';
+import purchaseRouter from './models/purchases/route'
 import type { Request, NextFunction } from 'express';
 
 const app = express();
@@ -26,6 +27,7 @@ if (ENV.NODE_ENV !== 'production') {
 app.use('/', userRouter);
 app.use('/', coursesRouter);
 app.use('/', lessonRouter);
+app.use('/', purchaseRouter);
 
 app.use(globalErrorMiddleware);
 

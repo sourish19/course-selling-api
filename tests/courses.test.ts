@@ -1,37 +1,36 @@
-import { describe, it, expect } from "bun:test";
+import { describe, it, expect } from 'bun:test';
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = 'http://localhost:3000';
 
-let instructorToken = "";
-let courseId = "";
+let instructorToken = '';
+let courseId = '';
 
 const instructorEmail = `instructor_${Date.now()}@test.com`;
-const password = "password123";
+const password = 'password123';
 
-let studentToken = "";
+let studentToken = '';
 const studentEmail = `student_${Date.now()}@test.com`;
 
-
-describe("Course APIs", () => {
-  it("should signup instructor", async () => {
+describe('Course APIs', () => {
+  it('should signup instructor', async () => {
     const res = await fetch(`${BASE_URL}/auth/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: instructorEmail,
         password,
-        name: "Instructor",
-        role: "INSTRUCTOR",
+        name: 'Instructor',
+        role: 'INSTRUCTOR',
       }),
     });
 
     expect([200, 409]).toContain(res.status);
   });
 
-  it("should login instructor", async () => {
+  it('should login instructor', async () => {
     const res = await fetch(`${BASE_URL}/auth/signin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: instructorEmail,
         password,
@@ -44,16 +43,16 @@ describe("Course APIs", () => {
     expect(instructorToken).toBeDefined();
   });
 
-  it("should create course", async () => {
+  it('should create course', async () => {
     const res = await fetch(`${BASE_URL}/courses`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${instructorToken}`,
       },
       body: JSON.stringify({
-        title: "Test Course",
-        description: "Test Description",
+        title: 'Test Course',
+        description: 'Test Description',
         price: 1999,
       }),
     });
@@ -65,68 +64,68 @@ describe("Course APIs", () => {
     expect(courseId).toBeDefined();
   });
 
-  it("should get all courses", async () => {
+  it('should get all courses', async () => {
     const res = await fetch(`${BASE_URL}/courses`);
     const data = await res.json();
 
     expect(Array.isArray(data.data)).toBe(true);
   });
 
-  it("should get course by id", async () => {
+  it('should get course by id', async () => {
     const res = await fetch(`${BASE_URL}/courses/${courseId}`);
     const data = await res.json();
 
     expect(data.data.id).toBe(courseId);
-    expect(data.data.title).toBe("Test Course");
+    expect(data.data.title).toBe('Test Course');
   });
 
-  it("should update course", async () => {
+  it('should update course', async () => {
     const res = await fetch(`${BASE_URL}/courses/${courseId}`, {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${instructorToken}`,
       },
       body: JSON.stringify({
-        title: "Updated Course Title",
+        title: 'Updated Course Title',
       }),
     });
 
     const data = await res.json();
-    expect(data.data.title).toBe("Updated Course Title");
+    expect(data.data.title).toBe('Updated Course Title');
   });
 
-  it("should delete course", async () => {
+  it('should delete course', async () => {
     const res = await fetch(`${BASE_URL}/courses/${courseId}`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
         Authorization: `Bearer ${instructorToken}`,
       },
     });
 
     const data = await res.json();
-    expect(data.message).toBe("Course deleted");
+    expect(data.message).toBe('Course deleted');
   });
 
-  it("should signup student", async () => {
+  it('should signup student', async () => {
     const res = await fetch(`${BASE_URL}/auth/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: studentEmail,
         password,
-        name: "Student",
-        role: "STUDENT",
+        name: 'Student',
+        role: 'STUDENT',
       }),
     });
 
     expect([200, 409]).toContain(res.status);
   });
 
-  it("should login student", async () => {
+  it('should login student', async () => {
     const res = await fetch(`${BASE_URL}/auth/signin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: studentEmail,
         password,
@@ -139,21 +138,19 @@ describe("Course APIs", () => {
     expect(studentToken).toBeDefined();
   });
 
-
-  it("student cannot create course", async () => {
+  it('student cannot create course', async () => {
     const res = await fetch(`${BASE_URL}/courses`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${studentToken}`,
       },
       body: JSON.stringify({
-        title: "Invalid Course",
+        title: 'Invalid Course',
         price: 1000,
       }),
     });
 
     expect(res.status).toBe(401);
   });
-
 });

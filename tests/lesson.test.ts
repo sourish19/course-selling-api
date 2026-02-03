@@ -1,34 +1,34 @@
-import { describe, it, expect } from "bun:test";
+import { describe, it, expect } from 'bun:test';
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = 'http://localhost:3000';
 
-let instructorToken = "";
-let courseId = "";
-let lessonId = "";
+let instructorToken = '';
+let courseId = '';
+let lessonId = '';
 
 const email = `lesson_instructor_${Date.now()}@test.com`;
-const password = "password123";
+const password = 'password123';
 
-describe("Lesson APIs", () => {
-  it("should signup instructor", async () => {
+describe('Lesson APIs', () => {
+  it('should signup instructor', async () => {
     const res = await fetch(`${BASE_URL}/auth/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email,
         password,
-        name: "Lesson Instructor",
-        role: "INSTRUCTOR",
+        name: 'Lesson Instructor',
+        role: 'INSTRUCTOR',
       }),
     });
 
     expect([200, 409]).toContain(res.status);
   });
 
-  it("should login instructor", async () => {
+  it('should login instructor', async () => {
     const res = await fetch(`${BASE_URL}/auth/signin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email,
         password,
@@ -41,16 +41,16 @@ describe("Lesson APIs", () => {
     expect(instructorToken).toBeDefined();
   });
 
-  it("should create a course", async () => {
+  it('should create a course', async () => {
     const res = await fetch(`${BASE_URL}/courses`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${instructorToken}`,
       },
       body: JSON.stringify({
-        title: "Lesson Test Course",
-        description: "Course for lesson testing",
+        title: 'Lesson Test Course',
+        description: 'Course for lesson testing',
         price: 2999,
       }),
     });
@@ -61,16 +61,16 @@ describe("Lesson APIs", () => {
     expect(courseId).toBeDefined();
   });
 
-  it("should create a lesson", async () => {
+  it('should create a lesson', async () => {
     const res = await fetch(`${BASE_URL}/lessons`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${instructorToken}`,
       },
       body: JSON.stringify({
-        title: "Lesson 1",
-        content: "Lesson content",
+        title: 'Lesson 1',
+        content: 'Lesson content',
         courseId,
       }),
     });
@@ -82,7 +82,7 @@ describe("Lesson APIs", () => {
     expect(lessonId).toBeDefined();
   });
 
-  it("should get lessons for a course (public)", async () => {
+  it('should get lessons for a course (public)', async () => {
     const res = await fetch(`${BASE_URL}/courses/${courseId}/lessons`);
     const data = await res.json();
 

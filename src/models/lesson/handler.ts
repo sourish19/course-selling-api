@@ -5,7 +5,7 @@ import { createLessonService, getLessonService } from './service';
 import type { UpdateLessonDetails } from './types';
 
 export const createLesson = asyncHandler(async (req, res) => {
-  const user = req.user
+  const user = req.user;
   const data: UpdateLessonDetails = req.body;
 
   const lesson = await createLessonService(user, data);

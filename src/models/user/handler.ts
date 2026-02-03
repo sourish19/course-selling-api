@@ -5,7 +5,7 @@ import sanatizeUser from '../../lib/sanatize';
 import { findUserService, signinService, signupService } from './service';
 import cookie_Options from '../../config/cookies';
 import type { Signin, Signup } from './types';
-import {NotFoundError,UnauthorizedError} from '../../config/api-error';
+import { NotFoundError, UnauthorizedError } from '../../config/api-error';
 
 export const signup = asyncHandler(async (req, res) => {
   const user: Signup = req.body;
@@ -46,17 +46,14 @@ export const signin = asyncHandler(async (req, res) => {
 export const getUser = asyncHandler(async (req, res) => {
   if (!req.user) throw new UnauthorizedError();
 
-  const user = await findUserService(req.user)
+  const user = await findUserService(req.user);
 
-  if(!user) throw new NotFoundError("User not found")
+  if (!user) throw new NotFoundError('User not found');
 
   const sanatizedUser = sanatizeUser(user);
 
-  res
-    .status(200)
-    .json(new ApiResponse(200, 'User fetched', sanatizedUser));
+  res.status(200).json(new ApiResponse(200, 'User fetched', sanatizedUser));
 });
-
 
 export const logout = asyncHandler(async (req, res) => {
   if (!req.user) throw new UnauthorizedError();
