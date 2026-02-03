@@ -18,11 +18,12 @@ export const createCourse = asyncHandler(async (req, res) => {
   const course = await createCourseService(user, courseData);
 
   res
-    .status(201)
-    .json(new ApiResponse(201, 'Course created successfully', course));
+    .status(200)
+    .json(new ApiResponse(200, 'Course created successfully', course));
 });
 
 export const getAllCourses = asyncHandler(async (req, res) => {
+  console.log("Hiiiuiuiu")
   const getCourses = await getAllCoursesService();
 
   res.status(200).json(new ApiResponse(200, 'Fetched all courses', getCourses));
@@ -60,5 +61,5 @@ export const deleteCourseById = asyncHandler(async (req, res) => {
 
   await deleteCourseByIdService(user, id as string);
 
-  res.status(200).json(new ApiResponse(200, 'Course deleted successfully', {}));
+  res.status(200).json(new ApiResponse(200, 'Course deleted', {}));
 });

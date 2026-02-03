@@ -6,7 +6,7 @@ import { logger } from './lib/winston-logger';
 import globalErrorMiddleware from './middlewares/global-error-middleware';
 import userRouter from './models/user/route';
 import coursesRouter from './models/courses/route';
-import lessonRouter from './models/courses/route';
+import lessonRouter from './models/lesson/route';
 import type { Request, NextFunction } from 'express';
 
 const app = express();

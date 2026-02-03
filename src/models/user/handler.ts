@@ -6,7 +6,6 @@ import { findUserService, signinService, signupService } from './service';
 import cookie_Options from '../../config/cookies';
 import type { Signin, Signup } from './types';
 import {NotFoundError,UnauthorizedError} from '../../config/api-error';
-import { Role } from '../../config/auth-constants';
 
 export const signup = asyncHandler(async (req, res) => {
   const user: Signup = req.body;
@@ -21,7 +20,7 @@ export const signup = asyncHandler(async (req, res) => {
 });
 
 export const signin = asyncHandler(async (req, res) => {
-  const { email, password, role=Role.STUDENT }: Signin = req.body;
+  const { email, password, role }: Signin = req.body;
 
   const userSignin = await signinService({ email, password, role });
 

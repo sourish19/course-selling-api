@@ -1,15 +1,14 @@
 import { BadRequestError } from '../../config/api-error';
 import ApiResponse from '../../config/api-response';
 import asyncHandler from '../../config/async-handler';
-import type { Lesson } from '../../generated/prisma/client';
 import { createLessonService, getLessonService } from './service';
+import type { UpdateLessonDetails } from './types';
 
 export const createLesson = asyncHandler(async (req, res) => {
-  const user = req.user;
-  const data: Lesson = req.body;
+  const user = req.user
+  const data: UpdateLessonDetails = req.body;
 
   const lesson = await createLessonService(user, data);
-
   res
     .status(201)
     .json(new ApiResponse(200, 'Lesson created successfully', lesson));

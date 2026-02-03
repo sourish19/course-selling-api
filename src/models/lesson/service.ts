@@ -5,9 +5,9 @@ import {
   NotFoundError,
   UnauthorizedError,
 } from '../../config/api-error';
-import type { Lesson } from '../../generated/prisma/client';
+import type { UpdateLessonDetails } from './types';
 
-export const createLessonService = async (user: User, data: Lesson) => {
+export const createLessonService = async (user: User, data: UpdateLessonDetails) => {
   // * This is for checkinhg if the course is created by original instructor
   const isValidCourse = prisma.course.findFirst({
     where: {

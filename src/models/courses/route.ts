@@ -30,7 +30,7 @@ router
   .delete(authMiddleware, authorizeRole, deleteCourseById);
 
 // These two are public endpoints
-router.route('/courses').get(authMiddleware, getAllCourses);
-router.route('/courses/:id').get(authMiddleware, getCourseById);
+router.route('/courses').get(getAllCourses);
+router.route('/courses/:id').get(getCourseById);
 
 export default router;

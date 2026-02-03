@@ -12,7 +12,6 @@ const validationMiddleware = (schema: z.ZodType): RequestHandler => {
       throw new ValidationError(
         'Validation Error',
         [z.flattenError(result.error).fieldErrors],
-        []
       );
     }
   };
