@@ -17,7 +17,7 @@ export const SignupSchema = z.object({
 export const SigninSchema = z.object({
   email: z.string().min(1, { error: 'Email is required' }),
   password: z.string().min(1, { error: 'Password is required' }),
-  role: z.enum(Role),
+  role: z.enum(Role).default("STUDENT"),
 });
 
 export type SignupTypeValidation = z.infer<typeof SignupSchema>;

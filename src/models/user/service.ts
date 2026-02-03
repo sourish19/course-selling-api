@@ -9,7 +9,7 @@ import { comparePassword, hashPassword } from '../../lib/password';
 import type { Signup, FindUserParams, Signin } from './types';
 import { logger } from '../../lib/winston-logger';
 
-const findUserService = async ({ email, role }: FindUserParams) => {
+export const findUserService = async ({ email, role }: FindUserParams) => {
   try {
     const user = await prisma.user.findFirst({
       where: {

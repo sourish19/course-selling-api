@@ -4,8 +4,9 @@ import { Role } from '../config/auth-constants';
 
 const authorizeRole = asyncHandler(async (req, _res, next) => {
   const { role } = req.user;
+  console.log(role);
 
-  if (role === Role.INSTRUCTOR) next();
+  if (role === Role.INSTRUCTOR) return next();
 
   throw new UnauthorizedError();
 });
