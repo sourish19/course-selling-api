@@ -23,7 +23,6 @@ export const createCourse = asyncHandler(async (req, res) => {
 });
 
 export const getAllCourses = asyncHandler(async (req, res) => {
-  console.log('Hiiiuiuiu');
   const getCourses = await getAllCoursesService();
 
   res.status(200).json(new ApiResponse(200, 'Fetched all courses', getCourses));
@@ -63,7 +62,6 @@ export const deleteCourseById = asyncHandler(async (req, res) => {
 
   res.status(200).json(new ApiResponse(200, 'Course deleted', {}));
 });
-
 
 /* 
 
