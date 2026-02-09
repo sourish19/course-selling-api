@@ -1,5 +1,8 @@
 import { prisma } from '../../lib/prisma';
-import { ConflictError, NotFoundError } from '../../config/api-error';
+import {
+  ConflictError,
+  NotFoundError,
+} from '../../config/api-error';
 import type { CreateCourseSchemaType } from './validation';
 import type User from '../../types/auth';
 import type { UpdateCourseDetails } from './types';
@@ -95,6 +98,37 @@ export const deleteCourseByIdService = async (user: User, id: string) => {
         instructorId: user.id,
       },
     });
+  } catch (error) {
+    prismaError(error);
+  }
+};
+
+export const getCourseRevenueStatsService = async (user: User, id: string) => {
+  try {
+    const existing = await prisma.course.findFirst({
+      where: {
+        id,
+        instructorId: user.id,
+      },
+      select:{
+        id: true,
+        price: true
+      }
+    });
+
+    if (!existing) throw new NotFoundError();
+
+    const total_purchases = await prisma.purchase.count({
+      where:{
+        courseId: existing.id
+      }
+    })
+
+    return {
+      total_purchases,
+      totla_revenue:  total_purchases* existing.price,
+      course_price: existing.price,
+    };
   } catch (error) {
     prismaError(error);
   }

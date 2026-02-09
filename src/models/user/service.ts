@@ -2,12 +2,12 @@ import { prisma } from '../../lib/prisma';
 import {
   ConflictError,
   ForbiddenError,
-  InternalServerError,
   UnauthorizedError,
 } from '../../config/api-error';
 import { comparePassword, hashPassword } from '../../lib/password';
 import type { Signup, FindUserParams, Signin } from './types';
 import { logger } from '../../lib/winston-logger';
+import prismaError from '../../lib/prisma-error';
 
 export const findUserService = async ({ email, role }: FindUserParams) => {
   try {
@@ -23,7 +23,7 @@ export const findUserService = async ({ email, role }: FindUserParams) => {
     return user;
   } catch (error) {
     logger.error('Failed to find user', { email, error });
-    throw error;
+    prismaError(error);
   }
 };
 
@@ -33,34 +33,38 @@ export const signupService = async ({
   password,
   role,
 }: Signup) => {
-  const validUser = await findUserService({ email, role });
+  try {
+    const validUser = await findUserService({ email, role });
 
-  if (validUser) throw new ConflictError('Email already exists');
+    if (validUser) throw new ConflictError('Email already exists');
 
-  const hashedPassword = await hashPassword(password);
+    const hashedPassword = await hashPassword(password);
 
-  const user = await prisma.user.create({
-    data: {
-      email,
-      name,
-      password: hashedPassword,
-      role,
-    },
-  });
-
-  if (!user) throw new InternalServerError();
-
-  return user;
+    return await prisma.user.create({
+      data: {
+        email,
+        name,
+        password: hashedPassword,
+        role,
+      },
+    });
+  } catch (error) {
+    prismaError(error);
+  }
 };
 
 export const signinService = async ({ email, password, role }: Signin) => {
-  const validUser = await findUserService({ email, role });
+  try {
+    const validUser = await findUserService({ email, role });
 
-  if (!validUser) throw new ForbiddenError();
+    if (!validUser) throw new ForbiddenError();
 
-  const isPasswordValid = await comparePassword(validUser.password, password);
+    const isPasswordValid = await comparePassword(validUser.password, password);
 
-  if (!isPasswordValid) throw new UnauthorizedError('Invalid credentials');
+    if (!isPasswordValid) throw new UnauthorizedError('Invalid credentials');
 
-  return validUser;
+    return validUser;
+  } catch (error) {
+    prismaError(error);
+  }
 };

@@ -7,6 +7,7 @@ import {
   getCourseByIdService,
   updateCourseByIdService,
   deleteCourseByIdService,
+  getCourseRevenueStatsService,
 } from './service';
 import type { UpdateCourseDetails } from './types';
 import type { CreateCourseSchemaType } from './validation';
@@ -25,7 +26,9 @@ export const createCourse = asyncHandler(async (req, res) => {
 export const getAllCourses = asyncHandler(async (req, res) => {
   const courses = await getAllCoursesService();
 
-  res.status(200).json(new ApiResponse(200, 'Fetched all courses', courses));
+  res
+    .status(200)
+    .json(new ApiResponse(200, 'Fetched all courses', courses || {}));
 });
 
 export const getCourseById = asyncHandler(async (req, res) => {
@@ -35,7 +38,7 @@ export const getCourseById = asyncHandler(async (req, res) => {
 
   const course = await getCourseByIdService(id as string);
 
-  res.status(200).json(new ApiResponse(200, 'Fetched course', course));
+  res.status(200).json(new ApiResponse(200, 'Fetched course', course || {}));
 });
 
 export const updateCourseById = asyncHandler(async (req, res) => {
@@ -49,7 +52,9 @@ export const updateCourseById = asyncHandler(async (req, res) => {
 
   res
     .status(200)
-    .json(new ApiResponse(200, 'Course updated successfully', updatedCourse));
+    .json(
+      new ApiResponse(200, 'Course updated successfully', updatedCourse || {})
+    );
 });
 
 export const deleteCourseById = asyncHandler(async (req, res) => {
@@ -61,4 +66,17 @@ export const deleteCourseById = asyncHandler(async (req, res) => {
   await deleteCourseByIdService(user, id as string);
 
   res.status(200).json(new ApiResponse(200, 'Course deleted', {}));
+});
+
+export const getCourseRevenueStats = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { id } = req.params;
+
+  if (!id) throw new BadRequestError();
+
+  const revenue = await getCourseRevenueStatsService(user, id as string);
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, 'Course revenue fetched', revenue || {}));
 });

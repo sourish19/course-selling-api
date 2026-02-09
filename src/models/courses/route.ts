@@ -5,6 +5,7 @@ import {
   getAllCourses,
   deleteCourseById,
   updateCourseById,
+  getCourseRevenueStats,
 } from './handler';
 import { CreateCourseSchema } from './validation';
 import validationMiddleware from '../../middlewares/validation-middleware';
@@ -13,7 +14,7 @@ import authorizeRole from '../../middlewares/authorize-role-middleware';
 
 const router = Router();
 
-// only user whose role is INSTRUCTOR can hit these three endpoints
+//* only user whose role is INSTRUCTOR can hit these four endpoints
 router
   .route('/courses')
   .post(
@@ -28,6 +29,11 @@ router
 router
   .route('/courses/:id')
   .delete(authMiddleware, authorizeRole, deleteCourseById);
+// * this endpoint is for course revenue stats
+// * total purchases - total revenue - course price
+router
+  .route('/courses/:id/stats')
+  .get(authMiddleware, authorizeRole, getCourseRevenueStats);
 
 // These two are public endpoints
 router.route('/courses').get(getAllCourses);
