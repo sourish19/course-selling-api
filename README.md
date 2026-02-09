@@ -46,12 +46,14 @@ JWT_EXP=7d
 ## API Endpoints
 
 ### Authentication
+
 - `POST /auth/signup` - Register user
 - `POST /auth/signin` - Login (returns JWT token in cookie and response)
 - `GET /auth/me` - Get current user profile
 - `POST /auth/logout` - Logout
 
 ### Courses
+
 - `GET /courses` - List all courses
 - `GET /courses/:id` - Get course details
 - `POST /courses` - Create course (Instructor only)
@@ -59,10 +61,12 @@ JWT_EXP=7d
 - `DELETE /courses/:id` - Delete course (Instructor only)
 
 ### Lessons
+
 - `POST /lessons` - Create lesson (Instructor only)
 - `GET /courses/:courseId/lessons` - Get lessons for a course
 
 ### Purchases
+
 - `POST /purchases` - Purchase a course
 - `GET /users/:id/purchases` - Get user purchase history
 
@@ -108,6 +112,7 @@ bun test
 Models: User, Course, Lesson, Purchase. See `prisma/schema.prisma` for schema definition.
 
 **Migrations:**
+
 ```bash
 bunx prisma migrate dev --name migration_name
 bunx prisma migrate reset  # Warning: deletes all data
@@ -117,6 +122,7 @@ bunx prisma studio  # View database
 ## Logging
 
 Winston logger with daily rotating files:
+
 - `logs/YYYY-MM-DD-combined.log` (14 days retention)
 - `logs/YYYY-MM-DD-error.log` (30 days retention)
 - `logs/exceptions.log` and `logs/rejections.log`

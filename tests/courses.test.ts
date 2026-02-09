@@ -60,7 +60,7 @@ describe('Course APIs', () => {
     const data = await res.json();
     courseId = data.data.id;
 
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(201);
     expect(courseId).toBeDefined();
   });
 

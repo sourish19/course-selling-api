@@ -15,6 +15,8 @@ router
     validationMiddleware(CreateLessonSchema),
     createLesson
   );
+// * This is a public route for now, if needed to make it private like only
+// * enrolled user is able to fetch lesson then need to add a middleware & one check
 router.route('/courses/:courseId/lessons').get(getLesson);
 
 export default router;

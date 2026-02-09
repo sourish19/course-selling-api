@@ -11,7 +11,7 @@ export const createLesson = asyncHandler(async (req, res) => {
   const lesson = await createLessonService(user, data);
   res
     .status(201)
-    .json(new ApiResponse(200, 'Lesson created successfully', lesson));
+    .json(new ApiResponse(201, 'Lesson created successfully', lesson));
 });
 
 export const getLesson = asyncHandler(async (req, res) => {

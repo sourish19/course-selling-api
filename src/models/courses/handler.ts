@@ -18,14 +18,14 @@ export const createCourse = asyncHandler(async (req, res) => {
   const course = await createCourseService(user, courseData);
 
   res
-    .status(200)
-    .json(new ApiResponse(200, 'Course created successfully', course));
+    .status(201)
+    .json(new ApiResponse(201, 'Course created successfully', course));
 });
 
 export const getAllCourses = asyncHandler(async (req, res) => {
-  const getCourses = await getAllCoursesService();
+  const courses = await getAllCoursesService();
 
-  res.status(200).json(new ApiResponse(200, 'Fetched all courses', getCourses));
+  res.status(200).json(new ApiResponse(200, 'Fetched all courses', courses));
 });
 
 export const getCourseById = asyncHandler(async (req, res) => {
@@ -33,9 +33,9 @@ export const getCourseById = asyncHandler(async (req, res) => {
 
   if (!id) throw new BadRequestError();
 
-  const getCourses = await getCourseByIdService(id as string);
+  const course = await getCourseByIdService(id as string);
 
-  res.status(200).json(new ApiResponse(200, 'Fetched course', getCourses));
+  res.status(200).json(new ApiResponse(200, 'Fetched course', course));
 });
 
 export const updateCourseById = asyncHandler(async (req, res) => {
@@ -62,7 +62,3 @@ export const deleteCourseById = asyncHandler(async (req, res) => {
 
   res.status(200).json(new ApiResponse(200, 'Course deleted', {}));
 });
-
-/* 
-
-*/
