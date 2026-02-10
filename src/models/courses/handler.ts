@@ -1,6 +1,7 @@
 import { BadRequestError } from '../../config/api-error';
 import ApiResponse from '../../config/api-response';
 import asyncHandler from '../../config/async-handler';
+import { getValidatedQuery } from '../../lib/get-validated';
 import {
   createCourseService,
   getAllCoursesService,
@@ -10,7 +11,7 @@ import {
   getCourseRevenueStatsService,
 } from './service';
 import type { UpdateCourseDetails } from './types';
-import type { CreateCourseSchemaType } from './validation';
+import type { CreateCourseSchemaType, PaginatedSchemaType } from './validation';
 
 export const createCourse = asyncHandler(async (req, res) => {
   const user = req.user;
@@ -24,11 +25,13 @@ export const createCourse = asyncHandler(async (req, res) => {
 });
 
 export const getAllCourses = asyncHandler(async (req, res) => {
-  const courses = await getAllCoursesService();
+  const { page, limit } = getValidatedQuery<PaginatedSchemaType>(req);
+
+  const paginatedResults = await getAllCoursesService(page, limit);
 
   res
     .status(200)
-    .json(new ApiResponse(200, 'Fetched all courses', courses || {}));
+    .json(new ApiResponse(200, 'Fetched all courses', paginatedResults || {}));
 });
 
 export const getCourseById = asyncHandler(async (req, res) => {

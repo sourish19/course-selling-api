@@ -7,7 +7,7 @@ import {
   updateCourseById,
   getCourseRevenueStats,
 } from './handler';
-import { CreateCourseSchema } from './validation';
+import { CreateCourseSchema, PaginatedSchema } from './validation';
 import validationMiddleware from '../../middlewares/validation-middleware';
 import authMiddleware from '../../middlewares/auth-middleware';
 import authorizeRole from '../../middlewares/authorize-role-middleware';
@@ -35,8 +35,10 @@ router
   .route('/courses/:id/stats')
   .get(authMiddleware, authorizeRole, getCourseRevenueStats);
 
-// These two are public endpoints
-router.route('/courses').get(getAllCourses);
+// * These two are public endpoints
+router
+  .route('/courses')
+  .get(validationMiddleware(PaginatedSchema, 'query'), getAllCourses);
 router.route('/courses/:id').get(getCourseById);
 
 export default router;

@@ -4,6 +4,7 @@ declare global {
   namespace Express {
     export interface Request {
       user: USER;
+      validatedQuery: unknown;
     }
   }
 }

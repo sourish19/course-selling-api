@@ -1,8 +1,5 @@
 import { prisma } from '../../lib/prisma';
-import {
-  ConflictError,
-  NotFoundError,
-} from '../../config/api-error';
+import { ConflictError, NotFoundError } from '../../config/api-error';
 import type { CreateCourseSchemaType } from './validation';
 import type User from '../../types/auth';
 import type { UpdateCourseDetails } from './types';
@@ -36,9 +33,25 @@ export const createCourseService = async (
   }
 };
 
-export const getAllCoursesService = async () => {
+export const getAllCoursesService = async (page: number, limit: number) => {
   try {
-    return await prisma.course.findMany();
+    // * Since its nit a big db query, so its better to use Promis.all instead of transactions
+    const { paginatedResults, totalCount } = await prisma.$transaction(
+      async (tx) => {
+        const paginatedResults = await tx.course.findMany({
+          skip: (page - 1) * limit,
+          take: limit,
+          orderBy: {
+            created_at: 'desc',
+          },
+        });
+
+        const totalCount = await tx.course.count();
+
+        return { paginatedResults, totalCount };
+      }
+    );
+    return { paginatedResults, totalCount };
   } catch (error) {
     prismaError(error);
   }
@@ -110,23 +123,23 @@ export const getCourseRevenueStatsService = async (user: User, id: string) => {
         id,
         instructorId: user.id,
       },
-      select:{
+      select: {
         id: true,
-        price: true
-      }
+        price: true,
+      },
     });
 
     if (!existing) throw new NotFoundError();
 
     const total_purchases = await prisma.purchase.count({
-      where:{
-        courseId: existing.id
-      }
-    })
+      where: {
+        courseId: existing.id,
+      },
+    });
 
     return {
       total_purchases,
-      totla_revenue:  total_purchases* existing.price,
+      totla_revenue: total_purchases * existing.price,
       course_price: existing.price,
     };
   } catch (error) {

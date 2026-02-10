@@ -9,3 +9,22 @@ export default class ApiResponse<T> {
     this.data = data;
   }
 }
+
+export class PaginatedApiResponse<T> extends ApiResponse<T> {
+  public readonly total: number;
+  public readonly page: number;
+  public readonly limit: number;
+  constructor(
+    status: number,
+    message: string,
+    data: T,
+    page: number,
+    limit: number,
+    total: number
+  ) {
+    super(status, message, data);
+    this.total = total;
+    this.limit = limit;
+    this.page = page;
+  }
+}
